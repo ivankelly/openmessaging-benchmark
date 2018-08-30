@@ -51,14 +51,17 @@
       yum: pkg={{ item }} state=latest
       with_items:
           - wget
-          - java
+          - https://s3-us-west-2.amazonaws.com/pulsar-preview/jdk-8u171-linux-x64.rpm
           - sysstat
           - vim
+          - emacs-nox
+          - https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-6.2.4-x86_64.rpm
     - set_fact:
         zookeeperServers: "{{ groups['zookeeper']|map('extract', hostvars, ['ansible_default_ipv4', 'address'])|map('regex_replace', '(.*)', '\\1:2181') | join(',') }}"
         serviceUrl: "pulsar://{{ hostvars[groups['pulsar'][0]].private_ip }}:6650/"
         httpUrl: "http://{{ hostvars[groups['pulsar'][0]].private_ip }}:8080/"
         pulsarVersion: "1.22.0-incubating"
+        logstashBeatsEndpoint: "{{ hostvars[groups['prometheus'][0]].private_ip }}:5044"
     - file: path=/opt/pulsar state=absent
     - file: path=/opt/pulsar state=directory
     - name: Download Pulsar binary package
@@ -74,10 +77,20 @@
     - template:
         src: "templates/pulsar_env.sh"
         dest: "/opt/pulsar/conf/pulsar_env.sh"
+    - copy:
+        src: "templates/log4j2.yaml"
+        dest: "/opt/pulsar/conf/log4j2.yaml"
+    - template:
+        src: "templates/filebeat.yml"
+        dest: "/etc/filebeat/filebeat.yml"
     - name: Change locale to en_US.utf-8
       shell: |
         echo 'LANG=en_US.utf-8
               LC_ALL=en_US.utf-8' > /etc/environment
+    - systemd:
+        state: restarted
+        daemon_reload: yes
+        name: "filebeat"
 
 - name: ZooKeeper setup
   hosts: zookeeper
@@ -209,7 +222,7 @@
       lineinfile:
          dest: /opt/benchmark/bin/benchmark
          regexp: '^JVM_MEM='
-         line: 'JVM_MEM="-Xmx4G"'
+         line: 'JVM_MEM="-Xms1G -Xmx1G -XX:+UseG1GC"'
     - name: Install benchmark systemd service
       template:
         src: "templates/benchmark-worker.service"
@@ -219,6 +232,76 @@
         daemon_reload: yes
         name: "benchmark-worker"
 
+- name: Prometheus setup installation
+  hosts: prometheus
+  connection: ssh
+  become: true
+  tasks:
+    - set_fact:
+        prometheusVersion: "2.2.1"
+    - file: path=/opt/prometheus state=absent
+    - file: path=/opt/prometheus state=directory
+    - name: Download Prometheus Binary Package
+      unarchive:
+        src: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheusVersion }}/prometheus-{{ prometheusVersion }}.linux-amd64.tar.gz"
+        remote_src: yes
+        dest: /opt/prometheus
+        extra_opts: ["--strip-components=1"]
+    - set_fact:
+        private_ip: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
+
+- name: Prometheus setup
+  hosts: prometheus
+  connection: ssh
+  become: true
+  tasks:
+    - name: Add Extras Repo
+      shell: yum-config-manager --enable rhui-REGION-rhel-server-extras
+    - name: Install RPM packages
+      yum: pkg={{ item }} state=latest
+      with_items:
+      - docker
+      - https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-6.2.4.rpm
+      - https://artifacts.elastic.co/downloads/kibana/kibana-6.2.4-x86_64.rpm
+      - https://artifacts.elastic.co/downloads/logstash/logstash-6.2.4.rpm
+    - file:
+        path: "/opt/prometheus/{{ item }}"
+        state: directory
+      with_items:
+        - data
+    - file:
+        path: "/opt/grafana"
+        state: directory
+    - copy:
+        src: "templates/dashboards"
+        dest: "/opt/grafana/dashboards"
+    - template:
+        src: "templates/{{ item }}.service"
+        dest: "/etc/systemd/system/{{ item }}.service"
+      with_items:
+        - prometheus
+        - pulsar-dashboard
+    - template:
+        src: "templates/prometheus.yml"
+        dest: "/opt/prometheus/prometheus.yml"
+    - lineinfile:
+        line: 'server.host: "0.0.0.0"'
+        dest: "/etc/kibana/kibana.yml"
+        regexp: '^server.host:'
+        state: present
+    - copy:
+        src: "templates/logstash-beats-pulsar.conf"
+        dest: "/etc/logstash/conf.d/01-logstash-beats-pulsar.conf"
+    - systemd:
+        state: restarted
+        daemon_reload: yes
+        name: "{{ item }}"
+      with_items:
+        - prometheus
+        - pulsar-dashboard
+        - elasticsearch
+        - kibana
+        - logstash
 
 - name: List host addresses
   hosts: localhost

@@ -1,0 +1,60 @@
+- name: JFR
+  hosts: pulsar
+  connection: ssh
+  become: true
+  tasks:
+    - name: Start JFR on broker
+      shell: jcmd $(systemctl show -p MainPID pulsar | awk -F= '{ print $2 }') JFR.start name=pulsar settings=profile dumponexit=true filename=/tmp/pulsar.dump
+      tags:
+        - never
+        - start
+    - name: Stop JFR on broker
+      shell: jcmd $(systemctl show -p MainPID pulsar | awk -F= '{ print $2 }') JFR.stop name=pulsar
+      tags:
+        - never
+        - stop
+    - name: Dump JFR on broker
+      shell: jcmd $(systemctl show -p MainPID pulsar | awk -F= '{ print $2 }') JFR.dump name=pulsar filename=/tmp/pulsar.jfr compress=true
+      tags:
+        - never
+        - dump
+    - file: path="/tmp/jfr" state=directory
+    - name: Copy dumps to this machine
+      fetch:
+        src: /tmp/pulsar.jfr
+        dest: '/tmp/jfr/pulsar_{{ hostvars[inventory_hostname]["tags.Name"] }}_{{ inventory_hostname }}_{{ hostvars[inventory_hostname].private_ip }}.jfr'
+        flat: true
+      tags:
+        - never
+        - dump
+
+- name: JFR
+  hosts: bookie
+  connection: ssh
+  become: true
+  tasks:
+    - name: Start JFR on bookie
+      shell: jcmd $(systemctl show -p MainPID bookkeeper | awk -F= '{ print $2 }') JFR.start name=bookie settings=profile dumponexit=true filename=/tmp/bookie.dump
+      tags:
+        - never
+        - start
+    - name: Stop JFR on bookie
+      shell: jcmd $(systemctl show -p MainPID bookkeeper | awk -F= '{ print $2 }') JFR.stop name=bookie
+      tags:
+        - never
+        - stop
+    - name: Dump JFR on bookie
+      shell: jcmd $(systemctl show -p MainPID bookkeeper | awk -F= '{ print $2 }') JFR.dump name=bookie filename=/tmp/bookie.jfr compress=true
+      tags:
+        - never
+        - dump
+    - file: path="/tmp/jfr" state=directory
+    - name: Copy dumps to this machine
+      fetch:
+        src: /tmp/bookie.jfr
+        dest: '/tmp/jfr/bookie_{{ hostvars[inventory_hostname]["tags.Name"] }}_{{ inventory_hostname }}_{{ hostvars[inventory_hostname].private_ip }}.jfr'
+        flat: true
+      tags:
+        - never
+        - dump
+

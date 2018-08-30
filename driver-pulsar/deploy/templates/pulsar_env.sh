@@ -41,6 +41,9 @@
 # Configuration file of settings used in global zookeeper server
 # PULSAR_GLOBAL_ZK_CONF=
 
+
+PULSAR_ROUTING_APPENDER_DEFAULT=RollingFile
+
 # Extra options to be passed to the jvm
 PULSAR_MEM=" -Xms{{ max_heap_memory }} -Xmx{{ max_heap_memory }} -XX:MaxDirectMemorySize={{ max_direct_memory }}"
 
@@ -51,6 +54,7 @@ PULSAR_GC="${PULSAR_GC} -XX:+PrintGCDetails -XX:+PrintGCApplicationStoppedTime  
 
 # Extra options to be passed to the jvm
 PULSAR_EXTRA_OPTS="${PULSAR_EXTRA_OPTS} ${PULSAR_MEM} ${PULSAR_GC} -Dio.netty.leakDetectionLevel=disabled -Dio.netty.recycler.maxCapacity.default=1000 -Dio.netty.recycler.linkCapacity=1024"
+PULSAR_EXTRA_OPTS="${PULSAR_EXTRA_OPTS} -XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:+UnlockDiagnosticVMOptions -XX:+DebugNonSafepoints"
 
 # Add extra paths to the bookkeeper classpath
 # PULSAR_EXTRA_CLASSPATH=

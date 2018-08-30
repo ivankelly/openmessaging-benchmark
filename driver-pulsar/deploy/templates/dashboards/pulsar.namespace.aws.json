@@ -49,7 +49,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 16,
           "legend": {
@@ -128,7 +128,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 2,
           "legend": {
@@ -217,7 +217,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 5,
           "legend": {
@@ -295,7 +295,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "description": "",
           "fill": 1,
           "id": 8,
@@ -387,7 +387,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "decimals": 0,
           "fill": 1,
           "id": 7,
@@ -496,7 +496,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 4,
           "legend": {
@@ -599,7 +599,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 5,
           "id": 3,
           "legend": {
@@ -771,7 +771,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 9,
           "legend": {
@@ -861,7 +861,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 10,
           "legend": {
@@ -939,7 +939,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 11,
           "legend": {
@@ -1028,7 +1028,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 15,
           "legend": {
@@ -1105,7 +1105,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 6,
           "id": 12,
           "legend": {
@@ -1271,7 +1271,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "description": "Rate of writes into storage (can be lower than publish rate, when batching is enabled)",
           "fill": 1,
           "id": 13,
@@ -1350,7 +1350,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "description": "Reads from bookies",
           "fill": 1,
           "id": 14,
@@ -1441,7 +1441,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": "Prometheus",
         "hide": 0,
         "includeAll": false,
         "label": "Cluster",
@@ -1461,7 +1461,7 @@
       {
         "allValue": null,
         "current": {},
-        "datasource": "${DS_PROMETHEUS}",
+        "datasource": "Prometheus",
         "hide": 0,
         "includeAll": true,
         "label": "Namespace",

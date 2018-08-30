@@ -49,7 +49,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "decimals": 1,
           "fill": 1,
           "id": 5,
@@ -136,7 +136,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 6,
           "legend": {
@@ -166,32 +166,32 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(jvm_memory_bytes_committed{group=\"broker\"})",
+              "expr": "jvm_memory_bytes_committed{group=\"broker\",area=\"heap\"}",
               "format": "time_series",
               "hide": false,
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "Heap size",
+              "legendFormat": "Heap size {{ instance }}",
               "metric": "jvm_memory_bytes_committed",
               "refId": "A",
               "step": 60
             },
             {
-              "expr": "sum(jvm_memory_bytes_used{group=\"broker\"})",
+              "expr": "jvm_memory_bytes_used{group=\"broker\",area=\"heap\"}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "Used",
+              "legendFormat": "Used {{ instance }}",
               "metric": "jvm_memory_bytes_used",
               "refId": "B",
               "step": 60
             },
             {
-              "expr": "sum(jvm_memory_bytes_max{group=\"broker\"})",
+              "expr": "jvm_memory_bytes_max{group=\"broker\",area=\"heap\"}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "Max",
+              "legendFormat": "Max {{ instance }}",
               "metric": "jvm_memory_bytes_max",
               "refId": "C",
               "step": 60
@@ -238,7 +238,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 7,
           "legend": {
@@ -269,7 +269,7 @@
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "Used",
+              "legendFormat": "Used {{ instance }}",
               "metric": "jvm_memory_direct_bytes_used",
               "refId": "A",
               "step": 60
@@ -279,7 +279,7 @@
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "Max",
+              "legendFormat": "Max {{ instance }}",
               "metric": "jvm_memory_direct_bytes_max",
               "refId": "B",
               "step": 60
@@ -326,7 +326,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 8,
           "legend": {
@@ -362,12 +362,12 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(jvm_gc_collection_seconds_sum{group=\"broker\"}[30s]))",
+              "expr": "increase(jvm_gc_collection_seconds_sum{group=\"broker\"}[30s])",
               "format": "time_series",
               "hide": false,
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "Pause",
+              "legendFormat": "Pause {{ instance }}",
               "metric": "jvm_gc_collection_seconds_count",
               "refId": "B",
               "step": 60
@@ -426,7 +426,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "decimals": 1,
           "fill": 1,
           "id": 4,
@@ -513,7 +513,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 1,
           "legend": {
@@ -543,32 +543,32 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(jvm_memory_bytes_committed{group=\"bookie\"})",
+              "expr": "jvm_memory_bytes_committed{group=\"bookie\"}",
               "format": "time_series",
               "hide": false,
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "Heap size",
+              "legendFormat": "Heap size {{ instance }}",
               "metric": "jvm_memory_bytes_committed",
               "refId": "A",
               "step": 60
             },
             {
-              "expr": "sum(jvm_memory_bytes_used{group=\"bookie\"})",
+              "expr": "jvm_memory_bytes_used{group=\"bookie\"}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "Used",
+              "legendFormat": "Used {{ instance }}",
               "metric": "jvm_memory_bytes_used",
               "refId": "B",
               "step": 60
             },
             {
-              "expr": "sum(jvm_memory_bytes_max{group=\"bookie\"})",
+              "expr": "jvm_memory_bytes_max{group=\"bookie\"}",
               "format": "time_series",
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "Max",
+              "legendFormat": "Max {{ instance }}",
               "metric": "jvm_memory_bytes_max",
               "refId": "C",
               "step": 60
@@ -615,7 +615,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 2,
           "legend": {
@@ -703,7 +703,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "id": 3,
           "legend": {
@@ -739,12 +739,12 @@
           "steppedLine": false,
           "targets": [
             {
-              "expr": "sum(increase(jvm_gc_collection_seconds_sum{group=\"bookie\"}[30s]))",
+              "expr": "increase(jvm_gc_collection_seconds_sum{group=\"bookie\"}[30s])",
               "format": "time_series",
               "hide": false,
               "interval": "",
               "intervalFactor": 2,
-              "legendFormat": "Pause",
+              "legendFormat": "Pause {{ instance }}",
               "metric": "jvm_gc_collection_seconds_count",
               "refId": "B",
               "step": 60

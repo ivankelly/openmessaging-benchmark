@@ -1,0 +1,15 @@
+[Unit]
+Description=Elasticsearch Logstash Kibana
+After=docker.service
+Requires=docker.service
+ 
+[Service]
+WorkingDirectory=/opt/pulsar
+ExecStartPre=/usr/bin/docker pull sebp/elk
+ExecStart=/usr/bin/docker run --restart=always --name=systemd_elk -p 5601:5601 -p 9200:9200 -p 5044:5044 sebp/elk
+ExecStop=/usr/bin/docker stop systemd_elk
+ExecStopPost=/usr/bin/docker rm -f systemd_elk
+ExecReload=/usr/bin/docker restart systemd_elk
+ 
+[Install]
+WantedBy=multi-user.target

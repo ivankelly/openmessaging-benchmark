@@ -100,6 +100,14 @@ resource "aws_security_group" "benchmark_security_group" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  # ELK kibana web UI
+  ingress {
+    from_port   = 5601
+    to_port     = 5601
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   # outbound internet access
   egress {
     from_port   = 0
